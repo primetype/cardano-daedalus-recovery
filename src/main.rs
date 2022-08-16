@@ -9,7 +9,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    #[clap(required = true)]
+    #[clap(required = true, value_name = "ENCRYPTED_XPRV")]
     data: String,
     #[clap(required = true)]
     password: String,
@@ -45,4 +45,9 @@ fn main() {
     let p = ed25519::extended_to_public(&extended_sk);
     println!("expect={}", hex::encode(pk));
     println!("found ={}", hex::encode(p));
+
+    // this is going to be helpful to check that the bits of the SK are legitimate
+    // (help toward proving the key is a correct one)
+    println!("lowest bits:  0b{:80b}", extended_sk[0]);
+    println!("highest bits: 0b{:80b}", extended_sk[31]);
 }
